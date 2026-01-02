@@ -40,9 +40,10 @@ export const customConflictError = (message: string) => {
 };
 
 export const controllerError = async (res: Response, error: any) => {
-  if (error instanceof z.ZodError) {
-    const validationError = await error.issues.reduce(
-      (acc, issue) => {
+  if (error?.name === "ZodError") {
+    const validationError = error.issues.reduce(
+      (acc: Record<string, string>, issue: z.ZodIssue) => {
+        // Join path parts (e.g., ['users', 0, 'email'] becomes 'users.0.email')
         const field = issue.path.join(".");
         acc[field] = issue.message;
         return acc;

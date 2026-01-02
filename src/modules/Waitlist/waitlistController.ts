@@ -16,7 +16,7 @@ export const joinWaitlist = async (req: Request, res: Response) => {
 
     return res.status(response.status_code).json(response);
   } catch (error: any) {
-    console.error("userLogin Error:", error.message);
+    // console.error("userLogin Error:", error.message);
     controllerError(res, error);
   }
 };

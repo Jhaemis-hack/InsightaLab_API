@@ -11,4 +11,4 @@ const DB = async () => {
   }
 };
 
-module.exports = { DB };
+export default DB;

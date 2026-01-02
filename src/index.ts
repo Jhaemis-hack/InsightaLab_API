@@ -1,4 +1,5 @@
 import app from "./app";
+import DB from "./config/db";
 import redisClient from "./utils/redis/redis-server";
 import IoServer from "./utils/socket/socket";
 
@@ -27,7 +28,7 @@ const port = Number(process.env.PORT) || 4040;
 const startServer = async () => {
   console.log("Connecting to database ✈️");
 
-  //   await DB();
+  await DB();
   app.listen(port, "0.0.0.0", () => {
     console.log({
       message: "🚀 Application startup in progress...",
