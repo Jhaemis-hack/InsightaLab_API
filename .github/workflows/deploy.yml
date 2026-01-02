@@ -1,42 +1,29 @@
-name: Deploy to Heroku
+name: CD - Deploy to Heroku
 
 on:
-  push:
-    branches:
-      - main 
-      
-  pull_request:
-    branches:
-      - main
-      
+  workflow_run:
+    workflows: ["CI - Build & Validate"]   # <-- must equal your CI workflow name
+    types:
+      - completed
+
 jobs:
-  build-and-deploy:
-    if: github.event_name == 'push'  
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18' 
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
       - name: Set up Heroku remote
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
 
       - name: Deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
-          git push -f heroku HEAD:main
+          git push heroku HEAD:main --force
