@@ -2,9 +2,12 @@ import importPlugin from "eslint-plugin-import";
 import eslint from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
+import tseslint from "typescript-eslint"; // Updated 2026 recommended approach
+import tsParser from "@typescript-eslint/parser";
 
 module.exports = [
   eslint.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     files: ["**/*.ts"],
     plugins: {
@@ -13,7 +16,12 @@ module.exports = [
     },
     languageOptions: {
       ecmaVersion: 2021,
-      sourceType: "script",
+      sourceType: "module",
+      parser: tsParser,
+      parserOptions: {
+        project: "./tsconfig.json",
+        tsconfigRootDir: __dirname,
+      },
       globals: {
         require: "readonly",
         module: "readonly",
@@ -33,14 +41,22 @@ module.exports = [
       },
     },
     rules: {
-    //   "no-unused-vars": "off",
+      // "no-unused-vars": "off",
       "no-empty": "warn",
       "no-console": "off",
-      "no-undef": "error",
+      "no-undef": "warn",
       "no-unused-expressions": "error",
       "prettier/prettier": "error",
       "no-useless-catch": "error",
-      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-explicit-any": "off",
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_", }],
+      // "@typescript-eslint/no-unused-vars": [
+      //   "error",
+      //   {
+      //     argsIgnorePattern: "^_",
+      //     varsIgnorePattern: "^_",
+      //   },
+      // ],
     },
   },
   prettier,

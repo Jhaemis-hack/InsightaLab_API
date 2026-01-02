@@ -37,17 +37,13 @@ export const getFewAndPopulate = async (model: mongoose.Model<any>, query: any =
 };
 
 export const create = async (model: mongoose.Model<any>, data: any = {}) => {
-  return await model.create(data).then(async (data) => await data.save());
+  return await model.create(data).then(async data => await data.save());
 };
 
 export const deleteById = async (model: mongoose.Model<any>, id: string) => {
   return await model.findByIdAndDelete({ _id: id });
 };
 
-export const updateById = async (
-  model: mongoose.Model<any>,
-  id: string,
-  updateData: any = {}
-) => {
+export const updateById = async (model: mongoose.Model<any>, id: string, updateData: any = {}) => {
   return await model.findByIdAndUpdate({ _id: id }, { $set: updateData }, { new: true });
 };

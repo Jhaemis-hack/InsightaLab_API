@@ -1,7 +1,5 @@
 import request from "request";
 import dotenv from "dotenv";
-import { Response } from "express";
-// import twilio from "twilio";
 dotenv.config();
 
 class OTPService {
@@ -12,7 +10,7 @@ class OTPService {
 
   async sendOTP(user: any) {
     try {
-      const { countryCode, phone, phoneOtp } = user;
+      const { phone, phoneOtp } = user;
       // const userNumber = `${countryCode}${phone}`;
       const userNumber = `234${phone}`;
 
@@ -31,7 +29,7 @@ class OTPService {
         channel: this.channel,
       };
 
-      var options = {
+      const options = {
         method: "POST",
         url: `${this.baseUrl}/api/sms/send`,
         headers: {

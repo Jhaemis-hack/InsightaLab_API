@@ -16,17 +16,12 @@ if (!user_secret) {
   throw new Error("JWT Host Secret is not defined in environment variables.");
 }
 
-const auth_Z = (...allowedRoles: String[]) => {
+const auth_Z = (...allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (
-      (req.user && allowedRoles.includes(req.user.role)) ||
-      (req.auth && allowedRoles.includes(req.auth.role))
-    ) {
+    if ((req.user && allowedRoles.includes(req.user.role)) || (req.auth && allowedRoles.includes(req.auth.role))) {
       return next();
     }
-    throw customUnathorizedError(
-      "Forbidden: you do not have permission to access this resource"
-    );
+    throw customUnathorizedError("Forbidden: you do not have permission to access this resource");
   };
 };
 

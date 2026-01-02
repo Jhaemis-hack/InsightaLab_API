@@ -8,7 +8,7 @@ export interface IUserProfile extends mongoose.Document {
   homeAddress: {
     address: string;
     loc: { type: string; coordinates: [number, number] };
-  }; 
+  };
   phoneNumber: number;
   haveCar: boolean;
   enabledLocation: boolean;

@@ -1,5 +1,3 @@
-const sysMessage = {
-    
-}
+const sysMessage = {};
 
 export default sysMessage;

@@ -36,10 +36,10 @@ class SocketServer {
     if (!this.io) return;
 
     this.io.use((socket, next) => {
-      const token = socket.handshake.auth.token;
+      // const token = socket.handshake.auth.token;
 
       const err: any = new Error("not authorized");
-      err.data = { content: "Please retry later" }; 
+      err.data = { content: "Please retry later" };
       next(err);
     });
 

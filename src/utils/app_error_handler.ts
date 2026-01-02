@@ -71,4 +71,3 @@ const error_handler = (err: any, req: Request, res: Response, next: NextFunction
 };
 
 export default error_handler;
-

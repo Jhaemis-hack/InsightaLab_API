@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import z from "zod";
-import { string } from "zod/v4";
 
 class CustomError extends Error {
   statusCode: number;
@@ -42,11 +41,14 @@ export const customConflictError = (message: string) => {
 
 export const controllerError = async (res: Response, error: any) => {
   if (error instanceof z.ZodError) {
-    const validationError = await error.issues.reduce((acc, issue) => {
-      const field = issue.path.join(".");
-      acc[field] = issue.message;
-      return acc;
-    }, {} as Record<string, string>);
+    const validationError = await error.issues.reduce(
+      (acc, issue) => {
+        const field = issue.path.join(".");
+        acc[field] = issue.message;
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
 
     return res.status(StatusCodes.BAD_REQUEST).json({
       status_code: StatusCodes.BAD_REQUEST,
@@ -54,19 +56,10 @@ export const controllerError = async (res: Response, error: any) => {
       data: validationError,
     });
   } else {
-    return res
-      .status(
-        error.status_code ||
-          error.statusCode ||
-          StatusCodes.INTERNAL_SERVER_ERROR
-      )
-      .json({
-        status_code:
-          error.status_code ||
-          error.statusCode ||
-          StatusCodes.INTERNAL_SERVER_ERROR,
-        message: error.message || "Internal Server Error",
-        data: null,
-      });
+    return res.status(error.status_code || error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json({
+      status_code: error.status_code || error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+      message: error.message || "Internal Server Error",
+      data: null,
+    });
   }
 };

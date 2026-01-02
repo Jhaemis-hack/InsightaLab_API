@@ -1,7 +1,5 @@
-import request from "request";
 import dotenv from "dotenv";
 import { createClient, RedisArgument, SetOptions } from "redis";
-import { Response } from "express";
 dotenv.config();
 
 class RedisClient {
@@ -45,6 +43,7 @@ class RedisClient {
     try {
       return JSON.parse(value);
     } catch (e) {
+      console.log("Error parsing Redis value:", e);
       return value;
     }
   }
@@ -53,5 +52,3 @@ class RedisClient {
 // Export a single, persistent instance for use across the application
 const redisClient = new RedisClient();
 export default redisClient;
-
-

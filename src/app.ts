@@ -1,6 +1,7 @@
-require("dotenv").config();
-import express, { Request, Response, NextFunction } from "express";
-import mongoSanitize from "express-mongo-sanitize";
+import dotenv from "dotenv";
+dotenv.config();
+import express, { Request, Response } from "express";
+// import mongoSanitize from "express-mongo-sanitize";
 import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 import morgan from "morgan";
 import helmet from "helmet";
@@ -52,7 +53,7 @@ app.get("/api/v1", (req: Request, res: Response) => {
 });
 
 // TODO: Attach your routers here
-app.use('/api/v1/', WaitlistRouter);
+app.use("/api/v1/", WaitlistRouter);
 
 app.all("/{*splat}", (req: Request, res: Response) => {
   res.status(StatusCodes.NOT_FOUND).json({
