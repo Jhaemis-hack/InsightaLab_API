@@ -5,8 +5,16 @@ dotenv.config();
 class RedisClient {
   // The client instance is created once and reused
   private readonly client = createClient({
-    url: process.env.REDIS_URL || "redis://localhost:6379",
+    username: process.env.REDIS_USERNAME || "default",
+    password: process.env.REDIS_PASSWORD || "P@ssw0rd123",
+    socket: {
+      host: process.env.REDIS_HOST || "redis-122",
+      port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379,
+    },
   });
+  // private readonly client = createClient({
+  //   url: process.env.REDIS_URL || "redis://localhost:6379",
+  // });
   private isConnected = false;
 
   constructor() {
