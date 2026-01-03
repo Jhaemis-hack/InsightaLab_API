@@ -48,7 +48,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Server is up and running. Use /api/v1/*** to consume this API.");
 });
 
-app.get("/api/v1", (req: Request, res: Response) => {
+app.get(["/api/v1", "/api/v1/"], (req: Request, res: Response) => {
   res.send("Welcome to the Driveey Project API 🚘🚘🚘🚘");
 });
 

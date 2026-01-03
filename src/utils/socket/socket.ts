@@ -1,4 +1,5 @@
 import { Server, Socket } from "socket.io";
+import { Server as HttpServer } from "http";
 
 class SocketServer {
   private io: Server | null = null;
@@ -8,12 +9,12 @@ class SocketServer {
    * Initialize Socket.IO using a PORT
    * Call ONCE from entry file
    */
-  init(port: number) {
+  async init(server: HttpServer) {
     if (this.initialized) {
       return this.io;
     }
 
-    this.io = new Server(port, {
+    this.io = new Server(server, {
       path: "/api/socket/io",
       cors: {
         origin: "*",
@@ -24,7 +25,7 @@ class SocketServer {
     this.registerCoreEvents();
 
     this.initialized = true;
-    console.log(`Socket.IO running on port ${port}`);
+    console.log("Socket.IO server initialized");
 
     return this.io;
   }

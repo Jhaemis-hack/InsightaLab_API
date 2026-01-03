@@ -7,7 +7,6 @@ const port = Number(process.env.PORT) || 4040;
 
 (async function () {
   await redisClient.connect();
-  IoServer.init(port);
 
   // Handle graceful shutdown
   process.on("SIGTERM", async () => {
@@ -27,9 +26,8 @@ const port = Number(process.env.PORT) || 4040;
 
 const startServer = async () => {
   console.log("Connecting to database ✈️");
-
   await DB();
-  app.listen(port, "0.0.0.0", () => {
+  const server = app.listen(port, "0.0.0.0", () => {
     console.log({
       message: "🚀 Application startup in progress...",
       status: "Running",
@@ -38,6 +36,8 @@ const startServer = async () => {
       timestamp: new Date().toISOString(),
     });
   });
+
+  await IoServer.init(server);
 };
 
 // initialize database connection
