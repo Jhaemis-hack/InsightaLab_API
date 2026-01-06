@@ -4,7 +4,7 @@ import welcomeTemplate from "../email-templates/welcome-template";
 export const sendWelcomeEmail = async (email: string, firstName: string) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: "getsavey.com",
+      service: process.env.EMAIL_HOST,
       host: process.env.EMAIL_HOST,
       port: 465,
       secure: true,

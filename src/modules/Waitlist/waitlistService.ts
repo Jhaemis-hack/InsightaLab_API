@@ -5,6 +5,7 @@ import { IwaitlistDto } from "./dto";
 import Waitlist from "./waitlist.model";
 import { getByEmail } from "../../helpers/mongooseQuery";
 import { customBadRequestError } from "../../utils/custom_errors";
+import { sendWelcomeEmail } from "../../utils/email-dispatcher/email-release";
 
 export default class WaitlistService {
   private readonly waitlistRepository = Waitlist;
@@ -16,7 +17,9 @@ export default class WaitlistService {
       throw customBadRequestError("Email already joined the waitlist");
     }
 
-    await this.waitlistRepository.create(WaitlistDto);
+    const newWaitList = await this.waitlistRepository.create(WaitlistDto);
+
+    await sendWelcomeEmail(newWaitList.email, newWaitList.firstName);
 
     return {
       status_code: StatusCodes.OK,

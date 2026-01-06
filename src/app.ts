@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: ["*"], // update with your frontend domains in production
+  origin: ["https://driveey-fe.vercel.app"],
   methods: ["GET", "POST", "PUT", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "authorization"],
   credentials: true,
