@@ -27,7 +27,7 @@ const refreshSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 const refresh = mongoose.model("refreshToken", refreshSchema);

@@ -9,23 +9,14 @@ export function generateCodeVerifier(): string {
 }
 
 export function deriveCodeChallenge(codeVerifier: string): string {
-  return crypto
-    .createHash("sha256")
-    .update(codeVerifier)
-    .digest("base64url");
+  return crypto.createHash("sha256").update(codeVerifier).digest("base64url");
 }
 
-export function verifyCodeChallenge(
-  codeVerifier: string,
-  codeChallenge: string
-): boolean {
+export function verifyCodeChallenge(codeVerifier: string, codeChallenge: string): boolean {
   const derived = deriveCodeChallenge(codeVerifier);
   // Timing-safe comparison to prevent timing attacks
   try {
-    return crypto.timingSafeEqual(
-      Buffer.from(derived),
-      Buffer.from(codeChallenge)
-    );
+    return crypto.timingSafeEqual(Buffer.from(derived), Buffer.from(codeChallenge));
   } catch {
     return false;
   }

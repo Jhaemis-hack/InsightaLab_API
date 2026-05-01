@@ -43,7 +43,7 @@ class RequestService {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       };
 
       request(options, function (error, response) {

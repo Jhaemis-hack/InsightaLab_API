@@ -19,13 +19,13 @@ export interface ResponseType {
 
 export interface GitHubTokenResponse {
   access_token: string;
-  token_type:   string;
-  scope:        string;
+  token_type: string;
+  scope: string;
 }
 
 export interface GitHubUser {
-  id:         number;
-  login:      string;
-  email:      string | null;
+  id: number;
+  login: string;
+  email: string | null;
   avatar_url: string;
 }

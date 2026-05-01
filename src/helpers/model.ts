@@ -28,13 +28,7 @@ export function extractProfileListItem(data: any) {
   };
 }
 
-export function createProfile(
-  genderize: any,
-  agify: any,
-  nationalize: any,
-  profileId: string,
-  createdAt: string,
-) {
+export function createProfile(genderize: any, agify: any, nationalize: any, profileId: string, createdAt: string) {
   return {
     id: profileId,
     created_at: createdAt,
