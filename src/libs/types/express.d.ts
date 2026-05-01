@@ -1,7 +1,9 @@
 import "express-serve-static-core";
 
 interface AuthUser {
-  role: string;
+  sub: string;
+  username: string;
+  role: "admin" | "analyst";
   // add any other fields if needed
 }
 

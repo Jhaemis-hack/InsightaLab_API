@@ -1,104 +1,72 @@
 import mongoose from "mongoose";
 
-export interface IUserProfile extends mongoose.Document {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  homeAddress: {
-    address: string;
-    loc: { type: string; coordinates: [number, number] };
-  };
-  phoneNumber: number;
-  haveCar: boolean;
-  enabledLocation: boolean;
-  totalTrips: number;
-  isOnline: boolean;
-  pushNotif: boolean;
-  emailNotif: boolean;
-  smsNotif: boolean;
-  emargencyContact: number;
-  emergencySharing: boolean;
-  shareRideStatus: boolean;
-}
+// export interface IUserProfile extends mongoose.Document {
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   password: string;
+//   homeAddress: {
+//     address: string;
+//     loc: { type: string; coordinates: [number, number] };
+//   };
+//   phoneNumber: number;
+//   haveCar: boolean;
+//   enabledLocation: boolean;
+//   totalTrips: number;
+//   isOnline: boolean;
+//   pushNotif: boolean;
+//   emailNotif: boolean;
+//   smsNotif: boolean;
+//   emargencyContact: number;
+//   emergencySharing: boolean;
+//   shareRideStatus: boolean;
+// }
 
 const userProfileSchema = new mongoose.Schema(
   {
-    firstName: {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    name: {
       type: String,
       lowercase: true,
       default: "",
     },
-    lastName: {
+    gender: {
       type: String,
       lowercase: true,
       default: "",
     },
-    email: {
+    gender_probability: {
+      type: Number,
+    },
+    age_group: {
       type: String,
-      trim: true,
-      lowercase: true,
-      //   required: true,
     },
-    password: {
+    sample_size: {
+      type: Number,
+    },
+    age: {
+      type: Number,
+    },
+    country_id: {
       type: String,
-      default: "",
     },
-    homeAddress: {
-      address: {
-        type: String,
-        default: "",
-      },
-      loc: { type: { type: String, enum: ["Point"] }, coordinates: [Number, Number] },
+    country_name: {
+      type: String,
     },
-    phoneNumber: {
+    country_probability: {
       type: Number,
-      default: null,
     },
-    haveCar: {
-      type: Boolean,
-      default: false,
-    },
-    enabledLocation: {
-      type: Boolean,
-      default: false,
-    },
-    totalTrips: {
-      type: Number,
-      default: 0,
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
-    },
-    pushNotif: {
-      type: Boolean,
-      default: false,
-    },
-    emailNotif: {
-      type: Boolean,
-      default: false,
-    },
-    smsNotif: {
-      type: Boolean,
-      default: false,
-    },
-    emargencyContact: {
-      type: Number,
-      default: null,
-    },
-    emergencySharing: {
-      type: Boolean,
-      default: false,
-    },
-    shareRideStatus: {
-      type: Boolean,
-      default: false,
+    created_at: {
+      type: String,
     },
   },
   { timestamps: true, versionKey: false, collection: "users" },
 );
 
-const userProfile = mongoose.model("users", userProfileSchema);
+const userProfile = mongoose.model("user", userProfileSchema);
 
 export default userProfile;

@@ -1,41 +1,34 @@
 import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 import { customUnathorizedError } from "../utils/custom_errors";
+import staffProfile from "../modules/auth/models/staff";
+import { verifyJwtToken } from "../helpers/refreshToken";
 
-// Extend Express Request interface to include 'user' and 'auth'
-// declare global {
-//   namespace Express {
-//     interface Request {
-//       user?: any;
-//       auth?: any;
-//     }
-//   }
-// }
-
-const user_secret = process.env.JWT_SECRET;
+const user_secret = process.env.JWT_ACCESS_SECRET;
 if (!user_secret) {
   throw new Error("JWT Host Secret is not defined in environment variables.");
 }
 
-const auth_N = (req: Request, res: Response, next: NextFunction) => {
+const auth_N = async (req: Request, res: Response, next: NextFunction) => {
   if (req.user) {
     next();
   } else if (req.auth) {
     next();
   } else {
     let token = req.headers?.authorization?.split(" ")[1];
-    const cookieToken = req.cookies["access_token"];
+    const cookieToken = req.cookies.access_token;
 
     token = !token ? cookieToken : "";
 
-    if (!token) throw customUnathorizedError("No Authorization token provided");
+    if (!token) throw customUnathorizedError("Authentication required");
 
-    jwt.verify(token, user_secret, (err: any, decoded: any) => {
-      if (err) throw customUnathorizedError("Invalid or expired token");
+    const payload = verifyJwtToken(token);
 
-      req.auth = decoded;
-      next();
-    });
+    const staffExist = await staffProfile.findOne({ id: payload?.sub });
+
+    if (!staffExist) throw customUnathorizedError("Authentication required");
+
+    next();
   }
 };
 

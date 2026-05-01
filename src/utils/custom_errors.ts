@@ -35,8 +35,16 @@ export const customInternalServerError = (message: string) => {
   throw new CustomError(message, StatusCodes.INTERNAL_SERVER_ERROR);
 };
 
+export const customUnprocessableError = (message: string) => {
+  throw new CustomError(message, StatusCodes.UNPROCESSABLE_ENTITY);
+};
+
 export const customConflictError = (message: string) => {
   throw new CustomError(message, StatusCodes.CONFLICT);
+};
+
+export const ExternalServiceError = (message: string) => {
+  throw new CustomError(message, StatusCodes.BAD_GATEWAY);
 };
 
 export const controllerError = async (res: Response, error: any) => {
@@ -58,9 +66,8 @@ export const controllerError = async (res: Response, error: any) => {
     });
   } else {
     return res.status(error.status_code || error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json({
-      status_code: error.status_code || error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+      status: "error",
       message: error.message || "Internal Server Error",
-      data: null,
     });
   }
 };
