@@ -3,9 +3,9 @@ import {
   redirectToGitHub,
   handleGitHubCallback,
   handleCliCallback,
-  refreshTokens,
   logout,
   getMe,
+  authenticateRefreshToken,
 } from "./auth.controller";
 import auth_N from "../../middleware/AuthN";
 
@@ -21,7 +21,7 @@ router.get("/github/callback", handleGitHubCallback);
 router.post("/cli/callback", handleCliCallback);
 
 // Token rotation — both CLI and web
-router.post("/refresh/token", refreshTokens);
+router.post("/refresh/token", authenticateRefreshToken);
 
 router.post("/logout", auth_N, logout);
 

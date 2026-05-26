@@ -9,7 +9,7 @@ interface AuthUser {
 
 declare module "express-serve-static-core" {
   interface Request {
-    user?: AuthUser;
-    auth?: AuthUser;
+    user: AuthUser;
+    auth: AuthUser;
   }
 }

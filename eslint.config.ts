@@ -4,6 +4,7 @@ import prettier from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
 import tseslint from "typescript-eslint";
 import tsParser from "@typescript-eslint/parser";
+import globals from "globals";
 
 export default tseslint.config( // Using the tseslint helper provides better type safety
   eslint.configs.recommended,
@@ -20,8 +21,7 @@ export default tseslint.config( // Using the tseslint helper provides better typ
       parser: tsParser,
       parserOptions: {
         project: "./tsconfig.json",
-        // Use import.meta.dirname for ESM instead of __dirname
-        tsconfigRootDir: import.meta?.url, 
+        tsconfigRootDir: process.cwd(),
       },
       globals: {
         // These are standard Node globals
@@ -42,6 +42,14 @@ export default tseslint.config( // Using the tseslint helper provides better typ
     },
   },
   prettier,
+  {
+    files: ["src/__tests__/**/*.ts", "**/*.test.ts", "**/*.spec.ts"],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
   {
     ignores: ["commitlint.config.ts", "eslint.config.ts", "node_modules/", "dist/", "build/"],
   }

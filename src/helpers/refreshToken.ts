@@ -1,6 +1,4 @@
-import refresh from "../modules/auth/models/refresh";
 import crypto from "crypto";
-import { NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { customUnathorizedError } from "../utils/custom_errors";
 
@@ -26,14 +24,14 @@ export const createJwtToken = (payload: Omit<TokenPayload, "iat" | "exp">) => {
   return token;
 };
 
-export const verifyJwtToken = (token: string) => {
+export const verifyJwtToken = (token: string): any => {
   try {
     const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET!, {
       algorithms: ["HS256"],
       audience: "generalapi",
     });
     return payload;
-  } catch (err) {
+  } catch {
     throw customUnathorizedError("Authentication required");
   }
 };

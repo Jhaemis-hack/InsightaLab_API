@@ -6,25 +6,26 @@ import helmet from "helmet";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import csrf from "csrf";
 import error_handler from "./utils/app_error_handler";
 import morganMiddleware from "./middleware/morgan";
 import userRouter from "./modules/User/userRoutes";
-import csrf from "csrf";
+import authRouter from "./modules/auth/auth.router";
 
 const app = express();
 
 app.use(morganMiddleware);
 app.use(helmet());
-
 app.use(cookieParser());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : ["https://driveey-fe.vercel.app"];
+
 const corsOptions = {
-  origin: ["https://driveey-fe.vercel.app"],
-  methods: ["GET", "POST", "PUT", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "authorization"],
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-API-Version", "X-CSRF-Token"],
   credentials: true,
 };
 
@@ -44,27 +45,16 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Server is up and running. Use /api/v1/*** to consume this API.");
-});
-
-app.get(["/api", "/api/"], (req: Request, res: Response) => {
-  res.send("Welcome to the Insighta API 💉💉💉💉💉");
-});
-
-app.use("/api/profiles", userRouter);
-app.use("/api/auth", userRouter);
-
 const tokens = new csrf();
 
+// CSRF token endpoint — GET so it bypasses CSRF check
 app.get("/auth/csrf-token", (req, res) => {
   const secret = process.env.CSRF_SECRET!;
   const token = tokens.create(secret);
   res.json({ csrf_token: token });
 });
 
-// CSRF validation middleware for mutating web requests
-// Only applies to web portal (cookie-based) requests
+// CSRF validation — must run before route handlers
 app.use((req, res, next) => {
   const isMutation = ["POST", "PUT", "PATCH", "DELETE"].includes(req.method);
   const isWebRequest = !!req.cookies?.access_token;
@@ -83,6 +73,17 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Server is up and running. Use /api/v1/*** to consume this API.");
+});
+
+app.get(["/api", "/api/"], (req: Request, res: Response) => {
+  res.send("Welcome to the Insighta API 💉💉💉💉💉");
+});
+
+app.use("/api/profiles", userRouter);
+app.use("/api/auth", authRouter);
 
 app.all("/{*splat}", (req: Request, res: Response) => {
   res.status(StatusCodes.NOT_FOUND).json({

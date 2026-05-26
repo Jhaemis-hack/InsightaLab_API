@@ -1,4 +1,34 @@
+# Dependencies
 /node_modules/
+
+# Build output
+/dist/
+
+# Environment
 .env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Misc dev files
 library.js
 client.http
+
+# Agent operating files (not for human contributors)
+CLAUDE.md
+plan.md
+requirements.md
+.claude/

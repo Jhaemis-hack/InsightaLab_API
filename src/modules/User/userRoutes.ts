@@ -21,9 +21,9 @@ userRouter.get("/", auth_N, fetchAllProfiles);
 
 userRouter.get("/search", auth_N, searchProfiles);
 
-userRouter.get("/:profile_id", auth_N, fetchUserProfile);
+userRouter.get("/export", auth_N, auth_Z("admin"), exportProfiles);
 
-userRouter.get("/export",  auth_N, auth_Z("admin"), exportProfiles);
+userRouter.get("/:profile_id", auth_N, fetchUserProfile);
 
 userRouter.delete("/:profile_id", auth_N, auth_Z("admin"), deleteUserProfile);
 

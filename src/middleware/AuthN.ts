@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import * as jwt from "jsonwebtoken";
 import { customUnathorizedError } from "../utils/custom_errors";
 import staffProfile from "../modules/auth/models/staff";
 import { verifyJwtToken } from "../helpers/refreshToken";
@@ -10,15 +9,14 @@ if (!user_secret) {
 }
 
 const auth_N = async (req: Request, res: Response, next: NextFunction) => {
-  if (req.user) {
+  if (req?.user) {
     next();
-  } else if (req.auth) {
+  } else if (req?.auth) {
     next();
   } else {
-    let token = req.headers?.authorization?.split(" ")[1];
-    const cookieToken = req.cookies.access_token;
-
-    token = !token ? cookieToken : "";
+    const headerToken = req.headers?.authorization?.split(" ")[1];
+    const cookieToken = req.cookies?.access_token;
+    const token = headerToken ?? cookieToken;
 
     if (!token) throw customUnathorizedError("Authentication required");
 
@@ -27,6 +25,8 @@ const auth_N = async (req: Request, res: Response, next: NextFunction) => {
     const staffExist = await staffProfile.findOne({ id: payload?.sub });
 
     if (!staffExist) throw customUnathorizedError("Authentication required");
+
+    req.user = payload;
 
     next();
   }
